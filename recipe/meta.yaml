@@ -1,43 +1,45 @@
 {% set name = "metaflow" %}
-{% set version = "2.7.20" %}
+{% set version = "2.19.23" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: fefdb2552fb987b5ca39557e28dddaceb9347af75b95295274f0db0edd8e084a
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  sha256: 71dce211c79d6d328d4d0ae8ee7eeee7e1f1eca2bb3b1dd12054f03ce7c30195
+
 
 build:
   number: 0
   noarch: python
   entry_points:
-    - metaflow=metaflow.cmd.main_cli:main
-  script: {{ PYTHON }} -m pip install . -vv
+    - metaflow=metaflow.cmd.main_cli:start
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
 
 requirements:
   host:
     - pip
-    - python >=2.7
+    - python {{ python_min }}
+    - setuptools
   run:
-    - python >=2.7
+    - python >={{ python_min }}
     - boto3
     - requests
     - setuptools
-    - pylint
 
 test:
+  requires:
+    - python {{ python_min }}
   imports:
     - metaflow
     - metaflow.client
     - metaflow.datastore
     - metaflow.datatools
-    - metaflow.metadata
+    - metaflow.metadata_provider
     - metaflow.plugins
     - metaflow.plugins.aws
     - metaflow.plugins.aws.batch
-    - metaflow.plugins.conda
   commands:
     - metaflow --help
 
@@ -52,4 +54,6 @@ about:
 
 extra:
   recipe-maintainers:
+    - mt-ob
+    - saikonen
     - savingoyal

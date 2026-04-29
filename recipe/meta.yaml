@@ -12,6 +12,7 @@ source:
 build:
   number: 0
   skip: true  # [py<310]
+  skip: true  # [win]  # upstream imports fcntl unconditionally; not in upstream classifiers
   script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
   entry_points:
     - metaflow = metaflow.cmd.main_cli:start

@@ -15,7 +15,6 @@ build:
   script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
   entry_points:
     - metaflow = metaflow.cmd.main_cli:start
-    - metaflow-dev = metaflow.cmd.make_wrapper:main
 
 requirements:
   host:

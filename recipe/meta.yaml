@@ -1,31 +1,32 @@
 {% set name = "metaflow" %}
-{% set version = "2.7.20" %}
+{% set version = "2.19.23" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: fefdb2552fb987b5ca39557e28dddaceb9347af75b95295274f0db0edd8e084a
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  sha256: 71dce211c79d6d328d4d0ae8ee7eeee7e1f1eca2bb3b1dd12054f03ce7c30195
 
 build:
   number: 0
-  noarch: python
+  skip: true  # [py<310]
+  skip: true  # [win]  # upstream imports fcntl unconditionally; not in upstream classifiers
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
   entry_points:
-    - metaflow=metaflow.cmd.main_cli:main
-  script: {{ PYTHON }} -m pip install . -vv
+    - metaflow = metaflow.cmd.main_cli:start
 
 requirements:
   host:
+    - python
     - pip
-    - python >=2.7
+    - setuptools
   run:
-    - python >=2.7
+    - python
     - boto3
     - requests
     - setuptools
-    - pylint
 
 test:
   imports:
@@ -33,12 +34,14 @@ test:
     - metaflow.client
     - metaflow.datastore
     - metaflow.datatools
-    - metaflow.metadata
+    - metaflow.metadata_provider
     - metaflow.plugins
     - metaflow.plugins.aws
     - metaflow.plugins.aws.batch
-    - metaflow.plugins.conda
+  requires:
+    - pip
   commands:
+    - pip check
     - metaflow --help
 
 about:
@@ -46,10 +49,12 @@ about:
   license: Apache-2.0
   license_family: APACHE
   license_file: LICENSE
-  summary: 'Metaflow: More Data Science, Less Engineering'
+  summary: 'Metaflow: More AI and ML, Less Engineering'
   doc_url: https://docs.metaflow.org/
   dev_url: https://github.com/Netflix/metaflow
 
 extra:
   recipe-maintainers:
+    - mt-ob
+    - saikonen
     - savingoyal

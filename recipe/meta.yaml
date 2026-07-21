@@ -1,18 +1,18 @@
 {% set name = "metaflow" %}
-{% set version = "2.19.23" %}
+{% set version = "2.19.35" %}
 
 package:
-  name: {{ name|lower }}
+  name: {{ name }}
   version: {{ version }}
 
 source:
   url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 71dce211c79d6d328d4d0ae8ee7eeee7e1f1eca2bb3b1dd12054f03ce7c30195
+  sha256: f349575c595151ca3fceb0f747ce6b67d74baa4ca1b71bd3f54bb8f92afdcc5e
 
 build:
   number: 0
-  skip: true  # [py<310]
-  skip: true  # [win]  # upstream imports fcntl unconditionally; not in upstream classifiers
+  # Upstream imports fcntl unconditionally; not in upstream classifiers
+  skip: true  # [py<310 or win]
   script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
   entry_points:
     - metaflow = metaflow.cmd.main_cli:start
@@ -26,7 +26,8 @@ requirements:
     - python
     - boto3
     - requests
-    - setuptools
+  run_constrained:
+    - metaflow-stubs ==2.19.35
 
 test:
   imports:
@@ -49,7 +50,10 @@ about:
   license: Apache-2.0
   license_family: APACHE
   license_file: LICENSE
-  summary: 'Metaflow: More AI and ML, Less Engineering'
+  summary: "Metaflow: More AI and ML, Less Engineering"
+  description: |
+    Metaflow is a human-centric framework designed to help scientists and engineers
+    build and manage real-life AI and ML systems.
   doc_url: https://docs.metaflow.org/
   dev_url: https://github.com/Netflix/metaflow
 

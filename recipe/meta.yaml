@@ -24,10 +24,10 @@ requirements:
     - setuptools
   run:
     - python
-    - boto3
     - requests
+    - boto3
   run_constrained:
-    - metaflow-stubs ==2.19.37
+    - metaflow-stubs =={{ version }}
 
 test:
   imports:
@@ -46,7 +46,7 @@ test:
     - metaflow --help
 
 about:
-  home: https://metaflow.org/
+  home: https://metaflow.org
   license: Apache-2.0
   license_family: APACHE
   license_file: LICENSE
@@ -54,7 +54,7 @@ about:
   description: |
     Metaflow is a human-centric framework designed to help scientists and engineers
     build and manage real-life AI and ML systems.
-  doc_url: https://docs.metaflow.org/
+  doc_url: https://docs.metaflow.org
   dev_url: https://github.com/Netflix/metaflow
 
 extra:

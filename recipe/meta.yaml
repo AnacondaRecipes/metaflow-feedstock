@@ -1,5 +1,5 @@
 {% set name = "metaflow" %}
-{% set version = "2.19.36" %}
+{% set version = "2.19.37" %}
 
 package:
   name: {{ name }}
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 7d1e173361c020da1a3864ed12c68ede4ee99a9e959b50f6c3a060559ee93b62
+  sha256: fec79cbd985c4a33ba52e24586b4875b567a736057e2c1340f529130e0b539a1
 
 build:
   number: 0
@@ -25,8 +25,8 @@ requirements:
     - wheel
   run:
     - python
-    - boto3
     - requests
+    - boto3
   run_constrained:
     - metaflow-stubs =={{ version }}
 
@@ -47,7 +47,7 @@ test:
     - metaflow --help
 
 about:
-  home: https://metaflow.org/
+  home: https://metaflow.org
   license: Apache-2.0
   license_family: APACHE
   license_file: LICENSE
@@ -55,7 +55,7 @@ about:
   description: |
     Metaflow is a human-centric framework designed to help scientists and engineers
     build and manage real-life AI and ML systems.
-  doc_url: https://docs.metaflow.org/
+  doc_url: https://docs.metaflow.org
   dev_url: https://github.com/Netflix/metaflow
 
 extra:

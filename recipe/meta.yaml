@@ -1,13 +1,16 @@
 {% set name = "metaflow" %}
-{% set version = "2.19.37" %}
+{% set version = "2.19.39" %}
 
 package:
   name: {{ name }}
   version: {{ version }}
 
 source:
-  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: fec79cbd985c4a33ba52e24586b4875b567a736057e2c1340f529130e0b539a1
+  - url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+    sha256: 59fdb07d8de9e2343658871fd6d967bf9d41799abb92f5835ac792390e7e8a61
+  - url: https://github.com/Netflix/metaflow/archive/refs/tags/{{ version }}.tar.gz
+    sha256: 50b993cb755cde7d744cc80a3269deec063cf5bd7996796439741b8417628178
+    folder: gh_src
 
 build:
   number: 0
@@ -31,6 +34,8 @@ requirements:
     - metaflow-stubs =={{ version }}
 
 test:
+  source_files:
+    - gh_src/test
   imports:
     - metaflow
     - metaflow.client
@@ -42,9 +47,17 @@ test:
     - metaflow.plugins.aws.batch
   requires:
     - pip
+    - pytest
+    - sh
+    - pytest-mock
+    - pandas
   commands:
     - pip check
     - metaflow --help
+    # Upstream's supported suite (tox.ini [testenv:unit]). test/core (broken --failed-dump
+    # wrapper), test/ux (needs devstack) and test/data/s3 (live S3) can't run in the
+    # build sandbox; test/unit/spin needs conda envs + network; docker tests are skipped.
+    - pytest -vv gh_src/test/unit gh_src/test/cmd gh_src/test/plugins --ignore=gh_src/test/unit/spin -m "not docker"
 
 about:
   home: https://metaflow.org

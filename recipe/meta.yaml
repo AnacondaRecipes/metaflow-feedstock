@@ -51,6 +51,7 @@ test:
     - sh
     - pytest-mock
     - pandas
+    - git
   commands:
     - pip check
     - metaflow --help
